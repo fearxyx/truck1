@@ -5,14 +5,23 @@
 
     RewriteEngine On
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-    # Handle Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+       RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteCond %{THE_REQUEST} \s/platba/vmrcfgbmpfppmdk/check/?merchantData=1&signature=450406be32ab9d3aaabe4215387f21c1&methodId=17&status=2&description=platba%20za%20premium%20ucet&currency=CZK&needConfirm=0&value=5.00&paymentId=2111353&accountId=2435&merchantId=1837&isOffline=1 [NC]
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+
+RewriteCond %{HTTPS} on
+RewriteCond %{THE_REQUEST} !\s/account/buy-premium [NC]
+RewriteRule ^ http://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+
+# Redirect Trailing Slashes...
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# Handle Front Controller... Default Laravel conf
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
